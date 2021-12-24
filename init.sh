@@ -48,8 +48,8 @@ sudo apt-get purge grub\*
 apt install grub-common -y
 apt install grub2-common -y
 # sudo apt-get install grub-efi
-sudo apt-get autoremove
-sudo update-grub
+sudo apt-get autoremove -y
+sudo update-grub -y
 sync
 
 ##################################
