@@ -13,62 +13,64 @@ Here, a shell script is written based on the contents of the [Wiki](https://gith
 ### Step.1 Prerequisites
 - It runs on the Controller Node.
   ```
-  # ./init.sh
+  # cd
+  # OpenStack-Stein/init.sh
   ```
 
 - It runs on the Controller Node.
   ```
-  # ./init.sh
+  # cd 
+  # OpenStack-Stein/init.sh
   ```
 
 ### Step.2 Keystone
 - It runs on the Controller Node.
   ```
-  # ./keystone.sh
+  # OpenStack-Stein/keystone.sh
   ```
 
 ### Step.3 Glance
 - It runs on the Controller Node.
   ```
-  # ./glance.sh
+  # OpenStack-Stein/glance.sh
   ```
 
 ### Step.4 Placement
 - It runs on the Controller Node.
   ```
-  # ./placement.sh
+  # OpenStack-Stein/placement.sh
   ```
 
 ### Step.5 Nova
 - It runs on the Controller Node.
   ```
-  # ./nova-controller.sh
+  # OpenStack-Stein/nova-controller.sh
   ```
 
 - It runs on the compute Node.
   ```
-  # ./nova-compute.sh
+  # OpenStack-Stein/nova-compute.sh
   ```
 
 - It runs on the Controller Node.
   ```
-  # ./nova-check-to-compute.sh
+  # OpenStack-Stein/nova-check-to-compute.sh
   ```
 
 ### Step.6 Neutron
 - It runs on the Controller Node.
   ```
-  # ./neutron-controller.sh
+  # OpenStack-Stein/neutron-controller.sh
   ```
 
 - It runs on the compute Node.
   ```
-  # ./neutron-compute.sh
+  # OpenStack-Stein/neutron-compute.sh
   ```
 
 ### Setp.7 Horizon
 - It runs on the Controller Node.
   ```
-  # ./horizon.sh
+  # OpenStack-Stein/horizon.sh
   ```
 
