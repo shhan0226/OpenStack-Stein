@@ -13,6 +13,7 @@ Here, a shell script is written based on the contents of the [Wiki](https://gith
 ### Downloads
 ```bash
 # sudo su
+# cd
 # git clone https://github.com/shhan0226/OpenStack-Stein.git
 ```
 
