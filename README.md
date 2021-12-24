@@ -10,6 +10,12 @@ ARM CPU Server-based Stein version manual installation method is written on [Wik
 
 Here, a shell script is written based on the contents of the [Wiki](https://github.com/shhan0226/Project-OpenStack/wiki), and the execution order of the shell script is as follows.
 
+### Downloads
+```bash
+# sudo su
+# git clone https://github.com/shhan0226/OpenStack-Stein.git
+```
+
 ### Step.1 Prerequisites
 - It runs on the Controller Node.
   ```
