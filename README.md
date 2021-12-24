@@ -14,7 +14,7 @@ Here, a shell script is written based on the contents of the [Wiki](https://gith
 - It runs on the Controller Node.
   ```
   # cd
-  # OpenStack-Stein/init.sh
+  # ./OpenStack-Stein/init.sh
   ```
 
 - It runs on the Controller Node.
