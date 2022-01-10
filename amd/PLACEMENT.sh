@@ -3,6 +3,10 @@
 read -p "What is openstack passwrd? : " STACK_PASSWD
 echo "$STACK_PASSWD"
 
+read -p "Input Contorller IP: (ex.192.168.0.2) " SET_IP
+echo ${SET_IP}
+
+
 ##########################################
 echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
 echo "Placement Reg. Mariadb ..."
