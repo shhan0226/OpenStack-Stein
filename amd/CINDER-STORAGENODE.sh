@@ -24,13 +24,13 @@ apt install thin-provisioning-tools -y
 echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
 echo "cinder Conf. ..."
 . admin-openrc
-
+sduo fdisk -l
+sudo pvdisplay
+sudo vgdisplay
 read -p "[LVM-PV] Would you like to set it? <y|n>: " PV
 sync
 
-if [ "${PV}" = "y" ]; then
-	sduo fdisk -l
-	sudo pvdisplay
+if [ "${PV}" = "y" ]; then	
 	read -p "pv-name: " PV_NAME
 	echo "$PV_NAME"
 	pvcreate $PV_NAME
@@ -44,7 +44,7 @@ fi
 read -p "[LVM-VG] Would you like to set it? <y|n>: " VG
 sync
 
-if [ "${VG}" = "y" ]; then
+if [ "${VG}" = "y" ]; then	
 	sudo vgdisplay
 	read -p "pg-name: " PV_NAME
 	echo "$PV_NAME"
