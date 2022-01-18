@@ -60,7 +60,8 @@ crudini --set /etc/nova/nova.conf api_database connection mysql+pymysql://nova:$
 crudini --set /etc/nova/nova.conf database connection mysql+pymysql://nova:${STACK_PASSWD}@controller/nova
 
 crudini --set /etc/nova/nova.conf DEFAULT transport_url rabbit://openstack:${STACK_PASSWD}@controller
-crudini --set /etc/nova/nova.conf my_ip ${SET_IP}
+#crudini --set /etc/nova/nova.conf my_ip ${SET_IP}
+crudini --set /etc/nova/nova.conf DEFAULT my_ip ${SET_IP}
 crudini --set /etc/nova/nova.conf use_neutron true
 crudini --set /etc/nova/nova.conf firewall_driver nova.virt.firewall.NoopFirewallDriver
 
