@@ -75,7 +75,8 @@ sync
 echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
 echo "Install Keystone ..."
 apt install keystone -y
-. admin-openrc
+# . admin-openrc
+
 crudini --set /etc/keystone/keystone.conf database connection mysql+pymysql://keystone:${STACK_PASSWD}@controller/keystone
 crudini --set /etc/keystone/keystone.conf token provider fernet
 sync
@@ -83,7 +84,7 @@ sync
 ##########################################
 echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
 echo "Input DB ..."
-. admin-openrc
+#. admin-openrc
 su -s /bin/sh -c "keystone-manage db_sync" keystone
 sync
 keystone-manage fernet_setup --keystone-user keystone --keystone-group keystone
@@ -93,7 +94,7 @@ sync
 ##########################################
 echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
 echo "Keystone Bootstrap ..."
-. admin-openrc
+#. admin-openrc
 keystone-manage bootstrap --bootstrap-password ${STACK_PASSWD} --bootstrap-admin-url http://controller:5000/v3/ --bootstrap-internal-url http://controller:5000/v3/ --bootstrap-public-url http://controller:5000/v3/ --bootstrap-region-id RegionOne
 sync
 
@@ -111,7 +112,7 @@ service apache2 restart
 ##########################################
 echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
 echo "Openstack set ..."
-. admin-openrc
+#. admin-openrc
 openstack domain create --description "An Example Domain" example
 openstack project create --domain default  --description "Service Project" service
 openstack project create --domain default --description "Demo Project" myproject
@@ -120,7 +121,7 @@ openstack role create myrole
 openstack role add --project myproject --user myuser myrole
 sync
 
-. admin-openrc
+#. admin-openrc
 unset OS_AUTH_URL OS_PASSWORD
 openstack --os-auth-url http://controller:5000/v3 --os-project-domain-name Default --os-password ${STACK_PASSWD} --os-user-domain-name Default --os-project-name admin --os-username admin token issue
 openstack --os-auth-url http://controller:5000/v3 --os-project-domain-name Default --os-password ${STACK_PASSWD} --os-user-domain-name Default --os-project-name myproject --os-username myuser token issue
@@ -128,5 +129,5 @@ sync
 
 ##########################################
 echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
-. admin-openrc
+#. admin-openrc
 openstack token issue

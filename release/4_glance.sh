@@ -23,6 +23,15 @@ read -p "What is openstack passwrd? : " STACK_PASSWD
 echo "$STACK_PASSWD"
 sync
 
+export OS_PROJECT_DOMAIN_NAME=Default
+export OS_USER_DOMAIN_NAME=Default
+export OS_PROJECT_NAME=admin
+export OS_USERNAME=admin
+export OS_PASSWORD=${STACK_PASSWD}
+export OS_AUTH_URL=http://controller:5000/v3
+export OS_IDENTITY_API_VERSION=3
+export OS_IMAGE_API_VERSION=2
+
 ##########################################
 echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
 echo "GLANCE Reg. Mariadb ..."
@@ -35,7 +44,7 @@ sync
 ##########################################
 echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
 echo "Openstack Glance ..."
-. admin-openrc
+#. admin-openrc
 openstack user create --domain default --password ${STACK_PASSWD} glance
 openstack role add --project service --user glance admin
 openstack service create --name glance --description "OpenStack Image" image
@@ -67,21 +76,21 @@ sync
 ##########################################
 echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
 echo "Input DB ..."
-. admin-openrc
+# . admin-openrc
 su -s /bin/sh -c "glance-manage db_sync" glance
 sync
 
 ##########################################
 echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
 echo "service restart"
-. admin-openrc
+# . admin-openrc
 service glance-api restart
 sync
 
 ##########################################
 echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
 echo "download img"
-. admin-openrc
+# . admin-openrc
 wget http://download.cirros-cloud.net/0.5.1/cirros-0.5.1-arm-disk.img
 openstack image create "cirros" --file cirros-0.5.1-arm-disk.img --disk-format qcow2 --container-format bare --public
 openstack image list

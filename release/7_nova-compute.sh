@@ -47,7 +47,7 @@ sync
 ##################################
 echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
 echo "NOVA Conf. ..."
-. admin-openrc
+
 crudini --set /etc/nova/nova.conf DEFAULT transport_url rabbit://openstack:stack@controller
 crudini --set /etc/nova/nova.conf DEFAULT my_ip ${SET_IP}
 crudini --set /etc/nova/nova.conf DEFAULT use_neutron true
@@ -80,14 +80,12 @@ sync
 ##################################
 echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
 echo "HYPER ACC. ..."
-. admin-openrc
 egrep -c '(vmx|svm)' /proc/cpuinfo
 sync
 
 ##################################
 echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
 echo "NOVA CONF. ..."
-. admin-openrc
 crudini --set /etc/nova/nova-compute.conf libvirt virt_type kvm
 sync
 

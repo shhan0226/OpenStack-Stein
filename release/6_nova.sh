@@ -23,6 +23,17 @@ read -p "What is openstack passwrd? : " STACK_PASSWD
 echo "$STACK_PASSWD"
 sync
 
+export OS_PROJECT_DOMAIN_NAME=Default
+export OS_USER_DOMAIN_NAME=Default
+export OS_PROJECT_NAME=admin
+export OS_USERNAME=admin
+export OS_PASSWORD=${STACK_PASSWD}
+export OS_AUTH_URL=http://controller:5000/v3
+export OS_IDENTITY_API_VERSION=3
+export OS_IMAGE_API_VERSION=2
+
+
+
 ##########################################
 echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
 echo "NOVA Reg. Mariadb ..."
@@ -41,7 +52,7 @@ sync
 ##########################################
 echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
 echo "Openstack Nova ..."
-. admin-openrc
+# . admin-openrc
 openstack user create --domain default --password ${STACK_PASSWD} nova
 openstack role add --project service --user nova admin
 openstack service create --name nova --description "OpenStack Compute" compute
@@ -60,7 +71,7 @@ apt install nova-novncproxy -y
 apt install nova-scheduler -y
 sync
 
-. admin-openrc
+# . admin-openrc
 crudini --set /etc/nova/nova.conf api_database connection mysql+pymysql://nova:${STACK_PASSWD}@controller/nova_api
 crudini --set /etc/nova/nova.conf database connection mysql+pymysql://nova:${STACK_PASSWD}@controller/nova
 crudini --set /etc/nova/nova.conf DEFAULT transport_url rabbit://openstack:${STACK_PASSWD}@controller
@@ -94,7 +105,7 @@ sync
 ##########################################
 echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
 echo "DB REG."
-. admin-openrc
+# . admin-openrc
 su -s /bin/sh -c "nova-manage api_db sync" nova
 su -s /bin/sh -c "nova-manage cell_v2 map_cell0" nova
 su -s /bin/sh -c "nova-manage cell_v2 create_cell --name=cell1 --verbose" nova

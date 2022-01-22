@@ -48,7 +48,7 @@ rabbitmqctl add_user openstack stack
 sync
 rabbitmqctl set_permissions openstack ".*" ".*" ".*"
 sync
-sudo systemctl status rabbitmq-server
+#sudo systemctl status rabbitmq-server
 sync
 
 ##################################
@@ -61,7 +61,7 @@ apt install python3-memcache -y
 sed -i s/127.0.0.1/${SET_IP}/ /etc/memcached.conf
 service memcached restart
 sync
-sudo systemctl status memcached
+#sudo systemctl status memcached
 sync
 
 ##################################
@@ -125,7 +125,7 @@ sync
 sudo systemctl daemon-reload
 sudo systemctl enable etcd
 sudo systemctl restart etcd	
-sudo systemctl status etcd	
+#sudo systemctl status etcd	
 sync
 
 ##################################
