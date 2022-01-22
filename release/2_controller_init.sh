@@ -19,7 +19,7 @@ echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
 echo "IP Setting ..."
 sudo apt install net-tools -y
 ifconfig
-read -p "Input Contorller IP: (ex.192.168.0.2) " SET_IP
+read -p "Input Contorller IP: (ex.192.168.0.2) : " SET_IP
 sync
 
 ##################################
