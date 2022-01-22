@@ -44,7 +44,7 @@ openstack network create --external --provider-network-type flat --provider-phys
 ifconfig
 echo "external sub net..."
 
-openstack subnet create --subnet-range 192.168.0.0/24 --no-dhcp --gateway 192.168.0.1 --network external --dns-nameserver 8.8.8.8 --allocation-pool start=192.168.0.100,end=192.168.0.150 external-subnet
+openstack subnet create --subnet-range 192.168.0.0/22 --no-dhcp --gateway 192.168.0.1 --network external --dns-nameserver 8.8.8.8 --allocation-pool start=192.168.0.100,end=192.168.0.150 external-subnet
 
 sync
 
