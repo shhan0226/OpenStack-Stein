@@ -45,8 +45,7 @@ sed -i 's/#    "compute": 2,/    "compute": 2,\n}/' /etc/openstack-dashboard/loc
 sed -i 's/#OPENSTACK_KEYSTONE_MULTIDOMAIN_SUPPORT = False/OPENSTACK_KEYSTONE_MULTIDOMAIN_SUPPORT = False/' /etc/openstack-dashboard/local_settings.py
 sed -i 's/#OPENSTACK_KEYSTONE_DEFAULT_DOMAIN = 'Default'/OPENSTACK_KEYSTONE_DEFAULT_DOMAIN = 'Default'/' /etc/openstack-dashboard/local_settings.py
 sed -i "s/'LOCATION': '127.0.0.1:11211',/'LOCATION': '${SET_IP}:11211',/" /etc/openstack-dashboard/local_settings.py
-sed -i 's/OPENSTACK_HOST = "127.0.0.1"/OPENSTACK_HOST = "\${SET_IP}"/' /etc/openstack-dashboard/local_settings.py
-
+sed -i "s/OPENSTACK_HOST = \"127.0.0.1\"/OPENSTACK_HOST = \"${SET_IP}\"/" /etc/openstack-dashboard/local_settings.py
 sed -i 's/TIME_ZONE = "UTC"/TIME_ZONE = "Asia\/Seoul"/' /etc/openstack-dashboard/local_settings.py
 sync
 
