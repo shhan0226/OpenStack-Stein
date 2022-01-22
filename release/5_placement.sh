@@ -24,6 +24,16 @@ echo "$STACK_PASSWD"
 sync
 
 ##########################################
+echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+echo "Placement Reg. Mariadb ..."
+mysql -e "CREATE DATABASE placement;"
+mysql -e "GRANT ALL PRIVILEGES ON placement.* TO 'placement'@'localhost' IDENTIFIED BY '${STACK_PASSWD}';"
+mysql -e "GRANT ALL PRIVILEGES ON placement.* TO 'placement'@'%' IDENTIFIED BY '${STACK_PASSWD}';"
+mysql -e "FLUSH PRIVILEGES"
+sync
+
+
+##########################################
 echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
 echo "Openstack Placement ..."
 
