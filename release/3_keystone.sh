@@ -1,0 +1,132 @@
+#!/bin/bash
+
+##################################
+# Change root privileges.
+##################################
+IAMACCOUNT=$(whoami)
+echo "${IAMACCOUNT}"
+
+if [ "$IAMACCOUNT" = "root" ]; then
+    echo "It's root account."
+else
+    echo "It's not a root account."
+	exit 100
+fi
+##################################
+# config /etc/hosts
+##################################
+echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+#echo "IP Setting ..."
+#ifconfig
+#read -p "Input Contorller IP: (ex.192.168.0.2) " SET_IP
+read -p "What is openstack passwrd? : " STACK_PASSWD
+echo "$STACK_PASSWD"
+sync
+
+##########################################
+echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+echo "Input admin-openrc"
+cat << EOF > admin-openrc
+export OS_PROJECT_DOMAIN_NAME=Default
+export OS_USER_DOMAIN_NAME=Default
+export OS_PROJECT_NAME=admin
+export OS_USERNAME=admin
+export OS_PASSWORD=${STACK_PASSWD}
+export OS_AUTH_URL=http://controller:5000/v3
+export OS_IDENTITY_API_VERSION=3
+export OS_IMAGE_API_VERSION=2
+EOF
+sync
+cat admin-openrc
+
+echo "Input demo-openrc"
+cat << EOF > demo-openrc
+export OS_PROJECT_DOMAIN_NAME=Default
+export OS_USER_DOMAIN_NAME=Default
+export OS_PROJECT_NAME=myproject
+export OS_USERNAME=myuser
+export OS_PASSWORD=${STACK_PASSWD}
+export OS_AUTH_URL=http://controller:5000/v3
+export OS_IDENTITY_API_VERSION=3
+export OS_IMAGE_API_VERSION=2
+EOF
+sync
+cat demo-openrc
+
+export OS_PROJECT_DOMAIN_NAME=Default
+export OS_USER_DOMAIN_NAME=Default
+export OS_PROJECT_NAME=admin
+export OS_USERNAME=admin
+export OS_PASSWORD=${STACK_PASSWD}
+export OS_AUTH_URL=http://controller:5000/v3
+export OS_IDENTITY_API_VERSION=3
+export OS_IMAGE_API_VERSION=2
+
+##########################################
+echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+echo "Keystone Reg. Mariadb ..."
+mysql -e "CREATE DATABASE keystone;"
+mysql -e "GRANT ALL PRIVILEGES ON keystone.* TO 'keystone'@'localhost' IDENTIFIED BY '${STACK_PASSWD}';"
+mysql -e "GRANT ALL PRIVILEGES ON keystone.* TO 'keystone'@'%' IDENTIFIED BY '${STACK_PASSWD}';"
+mysql -e "FLUSH PRIVILEGES"
+sync
+
+##########################################
+echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+echo "Install Keystone ..."
+apt install keystone -y
+. admin-openrc
+crudini --set /etc/keystone/keystone.conf database connection mysql+pymysql://keystone:${STACK_PASSWD}@controller/keystone
+crudini --set /etc/keystone/keystone.conf token provider fernet
+sync
+
+##########################################
+echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+echo "Input DB ..."
+. admin-openrc
+su -s /bin/sh -c "keystone-manage db_sync" keystone
+sync
+keystone-manage fernet_setup --keystone-user keystone --keystone-group keystone
+keystone-manage credential_setup --keystone-user keystone --keystone-group keystone
+sync
+
+##########################################
+echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+echo "Keystone Bootstrap ..."
+. admin-openrc
+keystone-manage bootstrap --bootstrap-password ${STACK_PASSWD} --bootstrap-admin-url http://controller:5000/v3/ --bootstrap-internal-url http://controller:5000/v3/ --bootstrap-public-url http://controller:5000/v3/ --bootstrap-region-id RegionOne
+sync
+
+##########################################
+echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+echo "devkit UI ..."
+systemctl stop devkit_flask.service
+systemctl daemon-reload
+echo "apache2 ..."
+echo "ServerName controller" >> /etc/apache2/apache2.conf
+cd ~
+sync
+service apache2 restart
+
+##########################################
+echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+echo "Openstack set ..."
+. admin-openrc
+openstack domain create --description "An Example Domain" example
+openstack project create --domain default  --description "Service Project" service
+openstack project create --domain default --description "Demo Project" myproject
+openstack user create --domain default --password ${STACK_PASSWD}  myuser
+openstack role create myrole
+openstack role add --project myproject --user myuser myrole
+sync
+
+. admin-openrc
+unset OS_AUTH_URL OS_PASSWORD
+openstack --os-auth-url http://controller:5000/v3 --os-project-domain-name Default --os-password ${STACK_PASSWD} --os-user-domain-name Default --os-project-name admin --os-username admin token issue
+openstack --os-auth-url http://controller:5000/v3 --os-project-domain-name Default --os-password ${STACK_PASSWD} --os-user-domain-name Default --os-project-name myproject --os-username myuser token issue
+sync
+
+##########################################
+echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+. admin-openrc
+openstack token issue
