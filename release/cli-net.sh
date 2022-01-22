@@ -1,4 +1,4 @@
-i#!/bin/bash
+#!/bin/bash
 
 ##################################
 # Change root privileges.
@@ -44,7 +44,7 @@ openstack network create --external --provider-network-type flat --provider-phys
 ifconfig
 echo "external sub net..."
 
-openstack subnet create --subnet-range 192.168.0.0/22 --no-dhcp --gateway 192.168.0.1 --network external --dns-nameserver 8.8.8.8 --allocation-pool start=192.168.0.100,end=192.168.0.150 external-subnet
+openstack subnet create --subnet-range 192.168.0.0/24 --no-dhcp --gateway 192.168.0.1 --network external --dns-nameserver 8.8.8.8 --allocation-pool start=192.168.0.100,end=192.168.0.150 external-subnet
 
 sync
 
@@ -52,7 +52,7 @@ sync
 ##################################
 # create Internal Net
 ##################################
-. demo-openrc
+. admin-openrc
 sync
 echo "internal net..."
 openstack network create internal
@@ -63,17 +63,17 @@ sync
 ##################################
 # create Subnet Internal Net
 ##################################
-. demo-openrc
+. admin-openrc
 sync
 echo "insternal sub net..."
-openstack subnet create --subnet-range 172.13.3.0/24 --dhcp --network internal --dns-nameserver 8.8.8.8 internal-subnet
+openstack subnet create --subnet-range 172.13.0.0/24 --dhcp --network internal --dns-nameserver 8.8.8.8 internal-subnet
 sync
 
 
 ##################################
 # create Router
 ##################################
-. demo-openrc
+. admin-openrc
 sync
 echo "route create..."
 openstack router create arm-router
@@ -92,7 +92,7 @@ sync
 ##################################
 # create keypair
 ##################################
-. demo-openrc
+. admin-openrc
 
 echo "keypair list..."
 openstack keypair list
@@ -102,7 +102,7 @@ openstack keypair create arm-key > arm-key.pem
 ##################################
 # create Secu.
 ##################################
-. demo-openrc
+. admin-openrc
 
 echo "security list..."
 openstack security group create arm-secu
@@ -123,7 +123,7 @@ openstack security group show arm-secu
 ##################################
 # create init.sh
 ##################################
-. demo-openrc
+. admin-openrc
 
 cat << EOF >init.sh
 #cloud-config
